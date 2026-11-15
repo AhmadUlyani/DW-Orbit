@@ -1,0 +1,105 @@
+nama_sumber,nama_baku,jenis_perusahaan
+RVSN USSR,RVSN USSR,Government
+CASC,CASC,Government
+Arianespace,Arianespace,Commercial
+General Dynamics,General Dynamics,Commercial
+VKS RF,VKS RF,Government
+NASA,NASA,Government
+SpaceX,SpaceX,Commercial
+US Air Force,US Air Force,Government
+ULA,ULA,Commercial
+Boeing,Boeing,Commercial
+Martin Marietta,Martin Marietta,Commercial
+Northrop,Northrop,Commercial
+MHI,MHI,Commercial
+ISRO,ISRO,Government
+Lockheed,Lockheed,Commercial
+Roscosmos,Roscosmos,Government
+ILS,ILS,Commercial
+Sea Launch,Sea Launch,Commercial
+ISAS,ISAS,Government
+Rocket Lab,Rocket Lab,Commercial
+Kosmotras,Kosmotras,Commercial
+Blue Origin,Blue Origin,Commercial
+US Navy,US Navy,Government
+ISA,ISA,Government
+ExPace,ExPace,Commercial
+ESA,ESA,Multinational
+Eurockot,Eurockot,Commercial
+IAI,IAI,Commercial
+Starsem,Starsem,Commercial
+ASI,ASI,Government
+AMBA,AMBA,Government
+CNES,CNES,Government
+JAXA,JAXA,Government
+Land Launch,Land Launch,Commercial
+Astra,Astra,Commercial
+MITT,MITT,Commercial
+CASIC,CASIC,Government
+UT,UT,Government
+Virgin Orbit,Virgin Orbit,Commercial
+KCST,KCST,Government
+KARI,KARI,Government
+Exos,Exos,Commercial
+Armée de l'Air,Armée de l'Air,Government
+CECLES,CECLES,Multinational
+i-Space,i-Space,Commercial
+AEB,AEB,Government
+SRC,SRC,Commercial
+Virgin Galactic,Virgin Galactic,Commercial
+OKB-586,OKB-586,Government
+Yuzhmash,Yuzhmash,Government
+Galactic Energy,Galactic Energy,Commercial
+RAE,RAE,Government
+IRGC,IRGC,Government
+Douglas,Douglas,Commercial
+Khrunichev,Khrunichev,Government
+EER,EER,Commercial
+Sandia,Sandia,Government
+Landspace,Landspace,Commercial
+OneSpace,OneSpace,Commercial
+GK LS,GK LS,Commercial
+Firefly,Firefly,Commercial
+CAS Space,CAS Space,Commercial
+United Launch Alliance,ULA,Commercial
+Indian Space Research Organization,ISRO,Government
+Mitsubishi Heavy Industries,MHI,Commercial
+China Aerospace Science and Technology Corporation,CASC,Government
+China Aerospace Science and Industry Corporation,CASIC,Government
+Firefly Aerospace,Firefly,Commercial
+National Aeronautics and Space Administration,NASA,Government
+Russian Federal Space Agency (ROSCOSMOS),Roscosmos,Government
+Russian Space Forces,VKS RF,Government
+Russian Aerospace Defence Forces,VKS RF,Government
+Strategic Rocket Forces,RVSN USSR,Government
+Korea Aerospace Research Institute,KARI,Government
+Korean Committee of Space Technology,KCST,Government
+National Aerospace Development Administration,KCST,Government
+Japan Aerospace Exploration Agency,JAXA,Government
+Institute of Space and Astronautical Science,ISAS,Government
+Astra Space,Astra,Commercial
+European Space Agency,ESA,Multinational
+Northrop Grumman Space Systems,Northrop,Commercial
+Northrop Grumman Innovation Systems,Northrop,Commercial
+Orbital ATK,Northrop,Commercial
+Orbital Sciences Corporation,Northrop,Commercial
+Iranian Space Agency,ISA,Government
+Islamic Revolutionary Guard Corps Aerospace Force,IRGC,Government
+LandSpace,Landspace,Commercial
+Israel Aerospace Industries,IAI,Commercial
+Lockheed Martin,Lockheed,Commercial
+Khrunichev State Research and Production Space Center,Khrunichev,Government
+Moscow Institute of Thermal Technology,MITT,Commercial
+Virgin Orbit,Virgin Orbit,Commercial
+United States Air Force,US Air Force,Government
+EXOS Aerospace,Exos,Commercial
+Sandia National Laboratories,Sandia,Government
+Yuzhnoye Design Bureau,Yuzhmash,Government
+Avio S.p.A,Avio,Commercial
+Royal Aircraft Establishment,RAE,Government
+European Launcher Development Organisation,CECLES,Multinational
+National Center of Space Research,CNES,Government
+Ministry of Defence of the Russian Federation,VKS RF,Government
+Makeyev Rocket Design Bureau,SRC,Commercial
+Energia,RKK Energiya,Commercial
+Unknown,Unknown,Unknown

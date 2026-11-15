@@ -1,0 +1,174 @@
+# Orbit Nusantara Analitika - Big Data Platform
+# Sources -> Ingestion -> Data Lake (MinIO) -> ETL (Airflow) -> DWH (PostgreSQL)
+#        -> ML (scikit-learn) -> Dashboard (Streamlit)
+# Credential dibaca dari .env (tidak di-commit), lihat .env.example.
+x-airflow-common: &airflow-common
+  build:
+    context: .
+    dockerfile: docker/airflow/Dockerfile
+  image: orbit-airflow:2.10.5
+  env_file: .env
+  environment: &airflow-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${AIRFLOW_DB_PASSWORD}@postgres:5432/airflow
+    AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__CORE__DEFAULT_TIMEZONE: Asia/Makassar
+    AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: Asia/Makassar
+    AIRFLOW__CORE__PARALLELISM: "8"
+    AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: "30"
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "false"
+    PYTHONPATH: /opt/airflow
+    ORBIT_PROJECT_DIR: /opt/airflow
+    # koneksi DWH & data lake untuk pipeline (nilai dari .env)
+    DW_HOST: postgres
+    DW_PORT: "5432"
+    DW_DB: dw_orbit
+    MINIO_ENDPOINT: minio:9000
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./pipeline:/opt/airflow/pipeline
+    - ./data:/opt/airflow/data
+    - ./mappings:/opt/airflow/mappings
+    - ./sql:/opt/airflow/sql
+    - ./backups:/opt/airflow/backups
+    - ./logs:/opt/airflow/logs
+    - ./docs:/opt/airflow/docs
+    - ./tests:/opt/airflow/tests
+  user: "50000:0"
+  depends_on: &airflow-depends
+    postgres:
+      condition: service_healthy
+    minio:
+      condition: service_healthy
+
+services:
+  # PostgreSQL 16: metadata Airflow + Data Warehouse dw_orbit
+  # schema: staging, meta, dw, mart, ml (dibuat oleh sql/init)
+  postgres:
+    image: postgres:16
+    container_name: orbit-postgres
+    env_file: .env
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: Asia/Makassar
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./sql/init:/docker-entrypoint-initdb.d:ro
+      - ./sql/ddl:/opt/ddl:ro
+    command: >
+      postgres -c shared_buffers=256MB -c work_mem=16MB
+               -c log_min_duration_statement=2000 -c timezone=UTC
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dw_orbit"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # MinIO: Data Lake (object storage S3-compatible)
+  # bucket: orbit-raw (bronze), orbit-clean (silver), orbit-curated (gold),
+  #         orbit-backup (disaster recovery)
+  # image minio/minio tidak lagi tersedia di Docker Hub, jadi dipakai build Bitnami (versi dikunci)
+  minio:
+    image: bitnamilegacy/minio:2025.4.22
+    container_name: orbit-minio
+    env_file: .env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_CONSOLE_PORT_NUMBER: "9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/bitnami/minio/data
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  minio-init:
+    image: bitnamilegacy/minio:2025.4.22
+    container_name: orbit-minio-init
+    env_file: .env
+    depends_on:
+      minio:
+        condition: service_healthy
+    volumes:
+      - ./scripts/minio_init.sh:/minio_init.sh:ro
+    entrypoint: ["/bin/bash", "/minio_init.sh"]
+    restart: "no"
+
+  # Apache Airflow 2.10 (LocalExecutor): orkestrasi pipeline
+  airflow-init:
+    <<: *airflow-common
+    container_name: orbit-airflow-init
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db migrate &&
+        airflow users create --role Admin --username "$${AIRFLOW_ADMIN_USER}" \
+          --password "$${AIRFLOW_ADMIN_PASSWORD}" --firstname Data --lastname Engineer \
+          --email admin@orbit.local || true
+    restart: "no"
+
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: orbit-airflow-webserver
+    command: webserver
+    ports:
+      - "8081:8080"     # 8080 sering dipakai Airflow project lain
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      <<: *airflow-depends
+      airflow-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: orbit-airflow-scheduler
+    command: scheduler
+    depends_on:
+      <<: *airflow-depends
+      airflow-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # Streamlit Dashboard: membaca schema mart & ml (user read-only bi_reader)
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/dashboard/Dockerfile
+    image: orbit-dashboard:1.0
+    container_name: orbit-dashboard
+    environment:
+      DW_HOST: postgres
+      DW_PORT: "5432"
+      DW_DB: dw_orbit
+      DW_BI_USER: ${DW_BI_USER}
+      DW_BI_PASSWORD: ${DW_BI_PASSWORD}
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./dashboard:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pg_data:
+  minio_data:

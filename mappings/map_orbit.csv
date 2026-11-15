@@ -1,0 +1,26 @@
+singkatan,kelompok_orbit
+LEO,Orbit Rendah
+VLEO,Orbit Rendah
+SSO,Orbit Rendah
+PO,Orbit Rendah
+MEO,Orbit Menengah
+GTO,Geostasioner dan Transfer
+GSTO,Geostasioner dan Transfer
+Direct-GEO,Geostasioner dan Transfer
+GEO,Geostasioner dan Transfer
+GSO,Geostasioner dan Transfer
+HEO,Orbit Elips Tinggi
+Elliptical,Orbit Elips Tinggi
+Molniya,Orbit Elips Tinggi
+Sub,Suborbital
+LO,Luar Angkasa (Deep Space)
+TLI,Luar Angkasa (Deep Space)
+Lunar,Luar Angkasa (Deep Space)
+Mars,Luar Angkasa (Deep Space)
+Venus,Luar Angkasa (Deep Space)
+Helio-N/A,Luar Angkasa (Deep Space)
+Heliocentric,Luar Angkasa (Deep Space)
+Asteroid,Luar Angkasa (Deep Space)
+L1-point,Luar Angkasa (Deep Space)
+L2,Luar Angkasa (Deep Space)
+TMI,Luar Angkasa (Deep Space)

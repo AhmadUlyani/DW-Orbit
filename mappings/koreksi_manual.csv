@@ -1,0 +1,9 @@
+kolom,nilai_asli,nilai_koreksi,alasan
+mission,Kwangmy\u0081\u008fngs\u0081\u008fng 1,Kwangmyŏngsŏng 1,TC-04 karakter ŏ rusak (tidak bisa diperbaiki ftfy)
+mission,Kwangmy\u0081\u008fngs\u0081\u008fng-2,Kwangmyŏngsŏng-2,TC-04 karakter ŏ rusak (tidak bisa diperbaiki ftfy)
+mission,Kwangmy\u0081\u008fngs\u0081\u008fng-3,Kwangmyŏngsŏng-3,TC-04 karakter ŏ rusak (tidak bisa diperbaiki ftfy)
+mission,Kwangmy\u0081\u008fngs\u0081\u008fng-3 (Unit 2),Kwangmyŏngsŏng-3 (Unit 2),TC-04 karakter ŏ rusak (tidak bisa diperbaiki ftfy)
+mission,Kwangmy\u0081\u008fngs\u0081\u008fng-4,Kwangmyŏngsŏng-4,TC-04 karakter ŏ rusak (tidak bisa diperbaiki ftfy)
+mission,OPSAT 3000 & VEN†æS,OPSAT 3000 & VENµS,TC-04 nama satelit VENµS rusak encoding
+mission,-TJS 6.00,TJS-6,TC-04 nama misi TJS-6 tercampur format angka
+location,"Rocket Lab LC-1A, M?hia Peninsula, New Zealand","Rocket Lab LC-1A, Māhia Peninsula, New Zealand",TC-04 karakter ā hilang di file sumber (tersimpan sebagai tanda tanya)
